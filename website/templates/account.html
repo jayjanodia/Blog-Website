@@ -1,0 +1,18 @@
+{# djlint:off T003, H006 #}
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+    <div align="center">
+      <h1>Welcome to the page, {{ current_user.username }}!</h1>
+      <img align="center"
+           src="{{ url_for('static', filename='profile_pics/' + current_user.profile_image) }}"
+           alt="username picture">
+    </div>
+  </div>
+  <div class="container">
+    <form method="post">
+      <div class="form-group"></div>
+      {{ form.hidden_tag() }} {{ form.username.label }}{{ form.username }} {{ form.email.label }}{{ form.email }} {{ form.picture.label }}{{ form.picture }} {{ form.submit }}
+    </form>
+  </div>
+{% endblock %}

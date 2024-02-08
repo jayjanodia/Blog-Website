@@ -1,15 +1,15 @@
 import os
 
 from flask import Flask
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from website.core.views import core
 from website.error_pages.handlers import error_pages
+from website.users.views import users
 
 app = Flask(__name__)
-app.register_blueprint(core)
-app.register_blueprint(error_pages)
 
 ######################
 ### DATABASE SETUP ###
@@ -26,4 +26,16 @@ db = SQLAlchemy(app)
 
 # allows you to make changes within your database
 Migrate(app, db)
-######################
+
+#################
+# LOGIN CONFIGS #
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "users.login"  # we are going to register a blueprint for users and which will have a 'login' view
+
+#################
+
+
+app.register_blueprint(core)
+app.register_blueprint(error_pages)
+app.register_blueprint(users)
