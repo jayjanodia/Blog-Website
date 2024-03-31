@@ -1,9 +1,9 @@
-import datetime
+from datetime import datetime, timezone
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from website import db, login_manager
+from website.extensions import db, login_manager
 
 
 @login_manager.user_loader
@@ -41,12 +41,12 @@ class User(db.Model, UserMixin):
 
 
 class BlogPost(db.Model):
-    users = db.relationship(User)
+    users = db.relationship(User, overlaps="author,posts")
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(
         db.Integer, db.ForeignKey("users.id"), nullable=False
     )  # we are calling the users table class, and the id attribute from the table class
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utc_now())
+    date = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
     title = db.Column(db.String(128), nullable=False)
     text = db.Column(db.Text, nullable=False)
 
